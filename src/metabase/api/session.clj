@@ -43,8 +43,8 @@
   [:as {{:keys [email password]} :body, remote-address :remote-addr}]
   {email    su/Email
    password su/NonBlankString}
-  (throttle/check (login-throttlers :ip-address) remote-address)
-  (throttle/check (login-throttlers :email)      email)
+  ;(throttle/check (login-throttlers :ip-address) remote-address)
+  ;(throttle/check (login-throttlers :email)      email)
   (let [user (db/select-one [User :id :password_salt :password :last_login], :email email, :is_active true)]
     ;; Don't leak whether the account doesn't exist or the password was incorrect
     (when-not (and user

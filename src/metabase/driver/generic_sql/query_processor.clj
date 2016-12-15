@@ -258,7 +258,7 @@
 
 (defn- apply-source-table [_ honeysql-form {{table-name :name, schema :schema} :source-table}]
   {:pre [table-name]}
-  (h/from honeysql-form (hx/qualify-and-escape-dots schema table-name)))
+  (h/from honeysql-form [(hx/qualify-and-escape-dots schema table-name) (hx/qualify-and-escape-dots schema table-name)]))
 
 (def ^:private clause-handlers
   ;; 1) Use the vars rather than the functions themselves because them implementation
