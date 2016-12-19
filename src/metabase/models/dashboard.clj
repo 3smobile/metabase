@@ -8,6 +8,7 @@
                              [interface :as i]
                              [permissions :as perms]
                              [revision :as revision])
+            [metabase.api.common :refer [*current-user-id*]]
             [metabase.models.revision.diff :refer [build-sentence]]
             [metabase.util :as u]))
 
@@ -20,12 +21,12 @@
           card     (cons (:card dashcard) (:series dashcard))]
       card)))
 
-(defn- can-read? [dashboard]
+(defn- can-read? [{creator-id :creator_id, :as dashboard}]
   ;; if Dashboard is already hydrated no need to do it a second time
   (let [cards (or (dashcards->cards (:ordered_cards dashboard))
                   (dashcards->cards (-> (db/select [DashboardCard :id :card_id], :dashboard_id (u/get-id dashboard))
                                         (hydrate :card :series))))]
-    (or (empty? cards)
+    (or (and (empty? cards) (= *current-user-id* creator-id))
         (some i/can-read? cards))))
 
 
