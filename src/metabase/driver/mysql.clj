@@ -61,8 +61,7 @@
   {:argslist '([connection-spec details])}
   [{connection-string :subname, :as connection-spec} {ssl? :ssl}]
   (assoc connection-spec
-    :subname (str connection-string "?" default-connection-args-string (when-not ssl?
-                                                                         "&useSSL=false"))))
+    :subname (str connection-string (if (s/includes? connection-string "?") "&" "?") default-connection-args-string)))
 
 (defn- connection-details->spec [details]
   (-> details

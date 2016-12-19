@@ -186,8 +186,8 @@
   {:pre [(map? field-instance)]}
   (let [{table-name :name, :as table}                 (field/table field-instance)
         {{dataset-name :dataset-id} :details, :as db} (table/database table)
-        query                                         (format "SELECT [%s.%s.%s] FROM [%s.%s] LIMIT %d"
-                                                              dataset-name table-name field-name dataset-name table-name driver/field-values-lazy-seq-chunk-size)
+        query                                         (format "SELECT [%s.%s.%s] FROM [%s.%s] AS [%s.%s] LIMIT %d"
+                                                              dataset-name table-name field-name dataset-name table-name dataset-name table-name driver/field-values-lazy-seq-chunk-size)
         fetch-page                                    (fn [page]
                                                         (map first (:rows (process-native* db (str query " OFFSET " (* page driver/field-values-lazy-seq-chunk-size))))))
         fetch-all                                     (fn fetch-all [page]
@@ -417,17 +417,8 @@
                                                :display-name "Dataset ID"
                                                :placeholder  "toucanSightings"
                                                :required     true}
-                                              {:name         "client-id"
-                                               :display-name "Client ID"
-                                               :placeholder  "1201327674725-y6ferb0feo1hfssr7t40o4aikqll46d4.apps.googleusercontent.com"
-                                               :required     true}
-                                              {:name         "client-secret"
-                                               :display-name "Client Secret"
-                                               :placeholder  "dJNi4utWgMzyIFo2JbnsK6Np"
-                                               :required     true}
-                                              {:name         "auth-code"
-                                               :display-name "Auth Code"
-                                               :placeholder  "4/HSk-KtxkSzTt61j5zcbee2Rmm5JHkRFbL5gD5lgkXek"
+                                              {:name         "service-account-json"
+                                               :display-name "Service account JSON"
                                                :required     true}])
           :execute-query         (u/drop-first-arg execute-query)
           ;; Don't enable foreign keys when testing because BigQuery *doesn't* have a notion of foreign keys. Joins are still allowed, which puts us in a weird position, however;

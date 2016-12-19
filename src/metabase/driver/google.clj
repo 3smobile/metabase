@@ -1,6 +1,7 @@
 (ns metabase.driver.google
   "Shared logic for various Google drivers, including BigQuery and Google Analytics."
   (:require [clojure.tools.logging :as log]
+            [clojure.java.io :as io]
             [metabase.config :as config]
             [metabase.db :as db]
             [metabase.models.database :refer [Database]]
@@ -72,21 +73,24 @@
   "Get a `GoogleCredential` for a `DatabaseInstance`."
   {:arglists '([scopes database])}
   ^com.google.api.client.googleapis.auth.oauth2.GoogleCredential
-  [scopes, {{:keys [^String client-id, ^String client-secret, ^String auth-code, ^String access-token, ^String refresh-token], :as details} :details, id :id, :as db}]
-  {:pre [(map? db) (seq client-id) (seq client-secret) (or (seq auth-code)
-                                                           (and (seq access-token) (seq refresh-token)))]}
-  (if-not (and (seq access-token)
-               (seq refresh-token))
-    ;; If Database doesn't have access/refresh tokens fetch them and try again
-    (let [details (-> (merge details (fetch-access-and-refresh-tokens scopes client-id client-secret auth-code))
-                      (dissoc :auth-code))]
-      (when id
-        (db/update! Database id, :details details))
-      (recur scopes (assoc db :details details)))
-    ;; Otherwise return credential as normal
-    (doto (.build (doto (GoogleCredential$Builder.)
-                    (.setClientSecrets client-id client-secret)
-                    (.setJsonFactory json-factory)
-                    (.setTransport http-transport)))
-      (.setAccessToken  access-token)
-      (.setRefreshToken refresh-token))))
+  [scopes, {{:keys [^String client-id, ^String client-secret, ^String auth-code, ^String access-token, ^String refresh-token, ^String service-account-json], :as details} :details, id :id, :as db}]
+  {:pre [(map? db) (or (seq auth-code)
+                       (seq service-account-json)
+                       (and (seq access-token) (seq refresh-token)))]}
+  (if service-account-json
+    (.createScoped (GoogleCredential/fromStream (io/input-stream (.getBytes service-account-json))) (java.util.Collections/singleton "https://www.googleapis.com/auth/bigquery"))
+    (if-not (and (seq access-token)
+                 (seq refresh-token))
+      ;; If Database doesn't have access/refresh tokens fetch them and try again
+      (let [details (-> (merge details (fetch-access-and-refresh-tokens scopes client-id client-secret auth-code))
+                        (dissoc :auth-code))]
+        (when id
+          (db/update! Database id, :details details))
+        (recur scopes (assoc db :details details)))
+      ;; Otherwise return credential as normal
+      (doto (.build (doto (GoogleCredential$Builder.)
+                      (.setClientSecrets client-id client-secret)
+                      (.setJsonFactory json-factory)
+                      (.setTransport http-transport)))
+        (.setAccessToken  access-token)
+        (.setRefreshToken refresh-token)))))

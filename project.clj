@@ -12,6 +12,7 @@
             "profile" ["with-profile" "+profile" "run" "profile"]
             "h2" ["with-profile" "+h2-shell" "run" "-url" "jdbc:h2:./metabase.db" "-user" "" "-password" "" "-driver" "org.h2.Driver"]}
   :dependencies [[org.clojure/clojure "1.8.0"]
+                 [org.clojure/tools.trace "0.7.9"]
                  [org.clojure/core.async "0.2.391"]
                  [org.clojure/core.match "0.3.0-alpha4"]              ; optimized pattern matching library for Clojure
                  [org.clojure/core.memoize "0.5.9"]                   ; needed by core.match; has useful FIFO, LRU, etc. caching mechanisms

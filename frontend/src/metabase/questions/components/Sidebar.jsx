@@ -3,7 +3,6 @@ import React, { PropTypes } from "react";
 import { Link } from "react-router";
 import S from "./Sidebar.css";
 
-import Icon from "metabase/components/Icon.jsx";
 import LabelIcon from "metabase/components/LabelIcon.jsx";
 import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper.jsx";
 
@@ -16,7 +15,6 @@ const Sidebar = ({ sections, labels, labelsLoading, labelsError, style, classNam
             {sections.map(section =>
                 <QuestionSidebarItem key={section.id} href={"/questions/" + section.id} {...section} />
             )}
-            <QuestionSidebarSectionTitle name="Labels" href="/questions/edit/labels" />
         </ul>
         <LoadingAndErrorWrapper loading={labelsLoading} error={labelsError} noBackground noWrapper>
         { () => labels.length > 0 ? // eslint-disable-line
@@ -26,12 +24,7 @@ const Sidebar = ({ sections, labels, labelsLoading, labelsError, style, classNam
             )}
             </ul>
         :
-            <div className={S.noLabelsMessage}>
-                <div>
-                  <Icon name="label" />
-                </div>
-                Create labels to group and manage questions.
-            </div>
+            <span></span>
         }
         </LoadingAndErrorWrapper>
         <ul>

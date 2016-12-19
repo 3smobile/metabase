@@ -7,6 +7,7 @@
                              [metric :refer [Metric]]
                              [pulse :refer [Pulse]]
                              [segment :refer [Segment]])
+            [metabase.api.common :refer [*current-user-id*]]
             [metabase.util :as u]))
 
 
@@ -19,12 +20,10 @@
    "pulse"     Pulse
    "segment"   Segment})
 
-(defn- can-? [f {model :model, model-id :model_id, :as activity}]
-  (if-let [object (when-let [entity (model->entity model)]
-                    (entity model-id))]
-    (f object)
-    true))
-
+(defn- can-? [f {model :model, model-id :model_id, user-id :user_id, :as activity}]
+  (if (= *current-user-id* user-id)
+    true
+    false))
 
 ;;; ------------------------------------------------------------ Entity & Lifecycle ------------------------------------------------------------
 
