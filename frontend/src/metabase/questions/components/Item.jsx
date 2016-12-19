@@ -32,16 +32,6 @@ const Item = ({ id, name, created, by, selected, favorite, archived, icon, label
         <ItemBody id={id} name={name} labels={labels} created={created} by={by} />
         { !archived ?
             <div className={S.rightIcons}>
-                <LabelPopover
-                    triggerElement={
-                        <Tooltip tooltip={"Labels"}>
-                            <Icon className={S.tagIcon} name="label" size={20} />
-                        </Tooltip>
-                    }
-                    triggerClasses={S.trigger}
-                    triggerClassesOpen={S.open}
-                    item={{ id, labels }}
-                />
                 <Tooltip tooltip={favorite ? "Unfavorite" : "Favorite"}>
                     <Icon className={S.favoriteIcon} name="star" size={20} onClick={() => setFavorited(id, !favorite) }/>
                 </Tooltip>

@@ -21,7 +21,6 @@ import DashboardApp from "metabase/dashboard/containers/DashboardApp.jsx";
 import HomepageApp from "metabase/home/containers/HomepageApp.jsx";
 import EntityBrowser from "metabase/questions/containers/EntityBrowser.jsx";
 import EntityList from "metabase/questions/containers/EntityList.jsx";
-import EditLabels from "metabase/questions/containers/EditLabels.jsx";
 import PulseEditApp from "metabase/pulse/containers/PulseEditApp.jsx";
 import PulseListApp from "metabase/pulse/containers/PulseListApp.jsx";
 import QueryBuilder from "metabase/query_builder/containers/QueryBuilder.jsx";
@@ -132,7 +131,6 @@ export const getRoutes = (store) =>
 
                 {/* QUESTIONS */}
                 <Route path="/questions" component={EntityBrowser}>
-                    <Route path="edit/labels" component={EditLabels} />
                     <Route path=":section" component={EntityList} />
                     <Route path=":section/:slug" component={EntityList} />
                 </Route>
