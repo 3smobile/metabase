@@ -21,8 +21,6 @@ import DashboardApp from "metabase/dashboard/containers/DashboardApp.jsx";
 import HomepageApp from "metabase/home/containers/HomepageApp.jsx";
 import EntityBrowser from "metabase/questions/containers/EntityBrowser.jsx";
 import EntityList from "metabase/questions/containers/EntityList.jsx";
-import PulseEditApp from "metabase/pulse/containers/PulseEditApp.jsx";
-import PulseListApp from "metabase/pulse/containers/PulseListApp.jsx";
 import QueryBuilder from "metabase/query_builder/containers/QueryBuilder.jsx";
 import SetupApp from "metabase/setup/containers/SetupApp.jsx";
 import UserSettingsApp from "metabase/user/containers/UserSettingsApp.jsx";
@@ -157,11 +155,6 @@ export const getRoutes = (store) =>
                     <Route path="databases/:databaseId/tables/:tableId/fields/:fieldId" component={ReferenceEntity} />
                     <Route path="databases/:databaseId/tables/:tableId/questions" component={ReferenceEntityList} />
                 </Route>
-
-                {/* PULSE */}
-                <Route path="/pulse" component={PulseListApp} />
-                <Route path="/pulse/create" component={PulseEditApp} />
-                <Route path="/pulse/:pulseId" component={PulseEditApp} />
 
                 {/* USER */}
                 <Route path="/user/edit_current" component={UserSettingsApp} />
