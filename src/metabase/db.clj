@@ -72,6 +72,13 @@
   (or (:type @connection-string-details)
       (config/config-kw :mb-db-type)))
 
+; set paths to keystore/truststore for SSL connection
+
+(System/setProperty "javax.net.ssl.keyStore" "keystore")
+(System/setProperty "javax.net.ssl.keyStorePassword" (config/config-str :mb-keystore-password))
+(System/setProperty "javax.net.ssl.trustStore" "truststore")
+(System/setProperty "javax.net.ssl.trustStorePassword" (config/config-str :mb-truststore-password))
+
 (def db-connection-details
   "Connection details that can be used when pretending the Metabase DB is itself a `Database`
    (e.g., to use the Generic SQL driver functions on the Metabase DB itself)."
@@ -84,6 +91,7 @@
                           :port     (config/config-int :mb-db-port)
                           :dbname   (config/config-str :mb-db-dbname)
                           :user     (config/config-str :mb-db-user)
+                          :subname  (str "//" (config/config-str :mb-db-host) ":" (config/config-int :mb-db-port) "/" (config/config-str :mb-db-dbname) "?verifyServerCertificate=true&useSSL=true&requireSSL=true")
                           :password (config/config-str :mb-db-pass)}
                :postgres {:type     :postgres
                           :host     (config/config-str :mb-db-host)

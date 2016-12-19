@@ -1,3 +1,6 @@
+(ns metabase.api.label
+  "`/api/label` endpoints.")
+
 ;(ns metabase.api.label
 ;  "`/api/label` endpoints."
 ;  (:require [compojure.core :refer [GET POST DELETE PUT]]
