@@ -74,10 +74,11 @@
 
 ; set paths to keystore/truststore for SSL connection
 
-(System/setProperty "javax.net.ssl.keyStore" "keystore")
-(System/setProperty "javax.net.ssl.keyStorePassword" (config/config-str :mb-keystore-password))
-(System/setProperty "javax.net.ssl.trustStore" "truststore")
-(System/setProperty "javax.net.ssl.trustStorePassword" (config/config-str :mb-truststore-password))
+(when-not *compile-files*
+  (System/setProperty "javax.net.ssl.keyStore" "keystore")
+  (System/setProperty "javax.net.ssl.keyStorePassword" (config/config-str :mb-keystore-password))
+  (System/setProperty "javax.net.ssl.trustStore" "truststore")
+  (System/setProperty "javax.net.ssl.trustStorePassword" (config/config-str :mb-truststore-password)))
 
 (def db-connection-details
   "Connection details that can be used when pretending the Metabase DB is itself a `Database`
