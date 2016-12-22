@@ -16,17 +16,6 @@ const Sidebar = ({ sections, labels, labelsLoading, labelsError, style, classNam
                 <QuestionSidebarItem key={section.id} href={"/questions/" + section.id} {...section} />
             )}
         </ul>
-        <LoadingAndErrorWrapper loading={labelsLoading} error={labelsError} noBackground noWrapper>
-        { () => labels.length > 0 ? // eslint-disable-line
-            <ul>
-            { labels.map(label =>
-                <QuestionSidebarItem key={label.id} href={"/questions/label/"+label.slug} {...label} />
-            )}
-            </ul>
-        :
-            <span></span>
-        }
-        </LoadingAndErrorWrapper>
         <ul>
             <li className={S.divider} />
             <QuestionSidebarItem name="Archive" href="/questions/archived" icon="archive" />

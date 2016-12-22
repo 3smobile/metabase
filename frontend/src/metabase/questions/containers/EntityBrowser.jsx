@@ -40,7 +40,6 @@ export default class EntityBrowser extends Component {
 
     componentWillMount() {
         this.props.selectSection(this.props.params.section, this.props.params.slug);
-        this.props.loadLabels();
     }
 
     componentWillReceiveProps(newProps) {
